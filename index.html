@@ -1054,16 +1054,18 @@ const chatResponses = {
   'default':      "Je comprends votre question. Pour une réponse précise, je recommande de demander votre audit gratuit ou de nous contacter directement. Notre équipe répond sous 24h !",
 };
 
-function getResponse(msg) {
-  const m = msg.toLowerCase();
-  if (m.includes('audit') || m.includes('gratuit')) return chatResponses.audit;
-  if (m.includes('pack') || m.includes('offre') || m.includes('voir les packs')) return chatResponses.pack;
-  if (m.includes('prix') || m.includes('tarif') || m.includes('coût') || m.includes('combien')) return chatResponses.prix;
-  if (m.includes('contact') || m.includes('appel') || m.includes('téléphone')) return chatResponses.contact;
-  if (m.includes('tonflow') || m.includes('ia') || m.includes('chatbot') || m.includes('robot')) return chatResponses.tonflow;
-  if (m.includes('immobilier') || m.includes('immo') || m.includes('maison') || m.includes('bien')) return chatResponses.immobilier;
-  if (m.includes('btp') || m.includes('construction') || m.includes('chantier') || m.includes('bâtiment')) return chatResponses.btp;
-  return chatResponses.default;
+async function getResponse(msg) {
+  try {
+    const response = await fetch('https://tonflow-ai.bluezonehills.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg })
+    });
+    const data = await response.json();
+    return data.reply;
+  } catch(err) {
+    return "Je rencontre un problème de connexion. Contactez-nous sur WhatsApp : +22890661256 😊";
+  }
 }
 
 function toggleChat() {
