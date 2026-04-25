@@ -1098,9 +1098,10 @@ function sendChat() {
   document.getElementById('chatMessages').appendChild(typing);
   document.getElementById('chatMessages').scrollTop = 99999;
 
-  setTimeout(() => {
+  setTimeout(async () => {
     typing.remove();
-    addMessage(getResponse(msg), 'bot');
+    const reply = await getResponse(msg);
+    addMessage(reply, 'bot');
   }, 1000 + Math.random() * 500);
 }
 
